@@ -7,6 +7,7 @@ import yaml
 from config import load
 from graph import bfs, test_repository
 from maven import Maven
+from resolve import dependency_graph
 from order import load_order
 
 
@@ -16,10 +17,11 @@ def run(cfg):
     if cfg["test_mode"]:
         children = test_repository(cfg["repository"])
         children(root)
+        graph = bfs(root, children, cfg["max_depth"])
     else:
         root += ":" + cfg["version"]
-        children = Maven(cfg["repository"]).children
-    graph = bfs(root, children, cfg["max_depth"])
+        repository = Maven(cfg["repository"])
+        graph = dependency_graph(root, repository, cfg["max_depth"])
     print(" -> ".join(load_order(graph)))
 
 
