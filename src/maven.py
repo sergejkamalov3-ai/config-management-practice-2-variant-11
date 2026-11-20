@@ -28,7 +28,8 @@ def expand(value, properties):
 class Maven:
     """Загрузка и кэширование метаданных выбранного репозитория."""
 
-    def __init__(self, repository):
+    def __init__(self, repository, *, all_direct=False):
+        self.all_direct = all_direct
         self.base = repository.rstrip("/")
         self.active = set()
 
@@ -81,17 +82,28 @@ class Maven:
                 managed[key] = ver
         for dep in root.findall("dependencies/dependency"):
             scope = expand(dep.findtext("scope", "compile"), props)
-            if scope not in ("compile", "runtime"):
-                continue
-            if expand(dep.findtext("optional", "false"), props) == "true":
-                continue
+            optional = expand(dep.findtext("optional", "false"), props)
             key, ver = coordinate(dep, props, managed)
-            deps[key] = ver
+            kind = dep.findtext("type", "jar")
+            classifier = dep.findtext("classifier", "")
+            deps[key, kind, classifier] = (ver, scope, optional)
         return props, managed, deps
 
     def children(self, name):
         """Вернуть прямые зависимости в порядке объявления в POM."""
-        return [f"{k}:{v}" for k, v in self.model(name)[2].items()]
+        result = []
+        for (key, kind, classifier), fields in self.model(name)[2].items():
+            version, scope, optional = fields
+            if self.all_direct:
+                details = [scope, kind]
+                if classifier:
+                    details.append(classifier)
+                if optional == "true":
+                    details.append("optional")
+                result.append(f"{key}:{version} ({', '.join(details)})")
+            elif scope in ("compile", "runtime") and optional != "true":
+                result.append(f"{key}:{version}")
+        return result
 
 
 def coordinate(dep, props, managed):
