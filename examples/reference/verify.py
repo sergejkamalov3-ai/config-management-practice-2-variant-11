@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
-from graph import bfs
+from resolve import dependency_graph
 from maven import Maven
 from order import load_order
 from render import render
@@ -45,7 +45,7 @@ def verify(root, folder):
     selected, = wrapper["children"]
     if collect(selected, reference) != root:
         raise ValueError("Неверный корень эталонного поддерева")
-    graph = bfs(root, Maven(CENTRAL).children, 8)
+    graph = dependency_graph(root, Maven(CENTRAL), 8)
     if {k: set(v) for k, v in graph.items()} != {
             k: set(v) for k, v in reference.items()}:
         raise ValueError(f"Различаются графы: {graph} / {reference}")

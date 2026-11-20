@@ -17,6 +17,8 @@ jobs:
         run: /usr/bin/python3 -m unittest discover -s tests -v
       - name: Compare three runtime graphs and record artifact transfers
         run: PYTHON=/usr/bin/python3 sh examples/reference/compare.sh
+      - name: Compare inheritance, version conflict and exclusions
+        run: /usr/bin/python3 examples/reference/regressions.py
       - name: Save graphs and observations
         uses: actions/upload-artifact@v4
         with:
