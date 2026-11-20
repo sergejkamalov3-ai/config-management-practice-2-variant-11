@@ -7,5 +7,5 @@ def load_order(graph):
     try:
         return list(TopologicalSorter(graph).static_order())
     except CycleError as error:
-        cycle = " -> ".join(error.args[1])
+        cycle = " -> ".join(reversed(error.args[1]))
         raise ValueError(f"Порядок загрузки невозможен: {cycle}") from error
