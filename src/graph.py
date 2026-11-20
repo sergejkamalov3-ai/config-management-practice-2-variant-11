@@ -4,6 +4,8 @@ from pathlib import Path
 
 import yaml
 
+from levels import walk_levels
+
 
 def test_repository(path):
     """Проверить и прочитать списки смежности для пакетов A–Z."""
@@ -26,12 +28,10 @@ def test_repository(path):
 
 
 def bfs(root, children, limit):
-    """Один рекурсивный шаг соответствует целому уровню BFS."""
+    """Обойти уровни BFS рекурсивно, сохраняя все обнаруженные рёбра."""
     graph = {root: []}
 
     def level(frontier, depth):
-        if depth == limit or not frontier:
-            return
         following = []
         for node in frontier:
             graph[node] = list(dict.fromkeys(children(node)))
@@ -39,7 +39,7 @@ def bfs(root, children, limit):
                 if child not in graph:
                     graph[child] = []
                     following.append(child)
-        level(following, depth + 1)
+        return following
 
-    level([root], 0)
+    walk_levels([root], limit, level)
     return graph
