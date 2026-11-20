@@ -5,12 +5,13 @@ import sys
 import yaml
 
 from config import load
+from maven import Maven
 
 
 def run(cfg):
-    """Показать эффективные настройки."""
-    for key, value in cfg.items():
-        print(f"{key} = {value}")
+    """Напечатать прямые зависимости пакета."""
+    name = f"{cfg['package']}:{cfg['version']}"
+    print(*Maven(cfg["repository"]).children(name), sep="\n")
 
 
 if __name__ == "__main__":
