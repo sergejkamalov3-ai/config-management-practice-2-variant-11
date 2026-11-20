@@ -1,0 +1,6 @@
+package: L
+repository: graph.yaml
+test_mode: true
+version: "4.13.2"
+output: ../build/leaf.png
+max_depth: 8

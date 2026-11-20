@@ -7,6 +7,7 @@ import yaml
 from config import load
 from graph import bfs, test_repository
 from maven import Maven
+from order import load_order
 
 
 def run(cfg):
@@ -19,8 +20,7 @@ def run(cfg):
         root += ":" + cfg["version"]
         children = Maven(cfg["repository"]).children
     graph = bfs(root, children, cfg["max_depth"])
-    for node, edges in graph.items():
-        print(node, "->", ", ".join(edges))
+    print(" -> ".join(load_order(graph)))
 
 
 if __name__ == "__main__":

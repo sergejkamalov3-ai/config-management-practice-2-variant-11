@@ -1,0 +1,6 @@
+package: X
+repository: graph.yaml
+test_mode: true
+version: "4.13.2"
+output: ../build/cycle.png
+max_depth: 8
