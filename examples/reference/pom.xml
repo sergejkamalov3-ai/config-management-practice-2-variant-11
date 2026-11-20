@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>edu.practice</groupId>
+  <artifactId>comparison</artifactId>
+  <version>1.0</version>
+  <properties>
+    <group>junit</group>
+    <artifact>junit</artifact>
+    <release>4.13.2</release>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>${group}</groupId>
+      <artifactId>${artifact}</artifactId>
+      <version>${release}</version>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,6 @@
+package: org.hamcrest:hamcrest-library
+repository: http://127.0.0.1:8765
+test_mode: false
+version: "1.3"
+output: ../build/hamcrest-library.png
+max_depth: 8

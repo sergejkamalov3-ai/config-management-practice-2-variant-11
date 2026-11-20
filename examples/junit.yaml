@@ -1,0 +1,6 @@
+package: junit:junit
+repository: http://127.0.0.1:8765
+test_mode: false
+version: "4.13.2"
+output: ../build/junit.png
+max_depth: 8
