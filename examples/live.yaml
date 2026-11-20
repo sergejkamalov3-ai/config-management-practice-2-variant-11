@@ -1,0 +1,6 @@
+package: junit:junit
+repository: https://repo.maven.apache.org/maven2
+test_mode: false
+version: "4.13.2"
+output: ../build/junit.png
+max_depth: 8
