@@ -38,7 +38,23 @@ def load(path):
         if not file.is_file():
             raise ValueError(f"repository: файл не найден: {file}")
         cfg["repository"] = str(file.resolve())
-    elif urlsplit(repo).scheme not in {"http", "https"} or not urlsplit(
-            repo).hostname or urlsplit(repo).query or urlsplit(repo).fragment:
-        raise ValueError("repository: требуется базовый URL HTTP(S)")
+    else:
+        validate_url(repo)
     return cfg
+
+
+def validate_url(value):
+    """Проверить адрес и порт до начала сетевых запросов."""
+    try:
+        parts = urlsplit(value)
+        port = parts.port
+        valid = (parts.scheme in {"http", "https"} and parts.hostname
+                 and not parts.query and not parts.fragment
+                 and not parts.username and not parts.password
+                 and not any(c.isspace() or ord(c) < 32 for c in value)
+                 and not parts.netloc.endswith(":")
+                 and (port is None or port > 0))
+    except ValueError as error:
+        raise ValueError("repository: некорректный URL или порт") from error
+    if not valid:
+        raise ValueError("repository: требуется базовый URL HTTP(S)")
