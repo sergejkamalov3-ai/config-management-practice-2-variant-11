@@ -1,0 +1,6 @@
+package: A
+repository: graph.yaml
+test_mode: true
+version: "4.13.2"
+output: ../build/diamond.png
+max_depth: 8

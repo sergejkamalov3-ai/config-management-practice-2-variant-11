@@ -5,13 +5,22 @@ import sys
 import yaml
 
 from config import load
+from graph import bfs, test_repository
 from maven import Maven
 
 
 def run(cfg):
-    """Напечатать прямые зависимости пакета."""
-    name = f"{cfg['package']}:{cfg['version']}"
-    print(*Maven(cfg["repository"]).children(name), sep="\n")
+    """Выбрать источник данных и построить граф."""
+    root = cfg["package"]
+    if cfg["test_mode"]:
+        children = test_repository(cfg["repository"])
+        children(root)
+    else:
+        root += ":" + cfg["version"]
+        children = Maven(cfg["repository"]).children
+    graph = bfs(root, children, cfg["max_depth"])
+    for node, edges in graph.items():
+        print(node, "->", ", ".join(edges))
 
 
 if __name__ == "__main__":
