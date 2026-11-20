@@ -11,7 +11,8 @@ from maven import Maven
 def run(cfg):
     """Напечатать прямые зависимости пакета."""
     name = f"{cfg['package']}:{cfg['version']}"
-    print(*Maven(cfg["repository"]).children(name), sep="\n")
+    repo = Maven(cfg["repository"], all_direct=True)
+    print(*repo.children(name), sep="\n")
 
 
 if __name__ == "__main__":
