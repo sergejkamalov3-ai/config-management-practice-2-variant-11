@@ -22,6 +22,11 @@ class MavenTest(unittest.TestCase):
             thread.start()
             try:
                 repo = Maven(f"http://127.0.0.1:{server.server_port}")
+                direct = Maven(repo.base, all_direct=True)
+                self.assertEqual(direct.children("junit:junit:4.13.2"), [
+                    "org.hamcrest:hamcrest-core:1.3 (compile, jar)",
+                    "org.hamcrest:hamcrest-library:1.3 (test, jar)",
+                ])
                 graph = bfs("junit:junit:4.13.2", repo.children, 5)
             finally:
                 server.shutdown()

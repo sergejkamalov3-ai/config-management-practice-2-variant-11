@@ -32,7 +32,7 @@ class GraphTest(unittest.TestCase):
     def test_cycle(self):
         graph = bfs("X", self.children, 10)
         self.assertEqual(graph["Z"], ["X"])
-        with self.assertRaisesRegex(ValueError, "невозможен"):
+        with self.assertRaisesRegex(ValueError, "X -> Y -> Z -> X"):
             load_order(graph)
 
     def test_leaf(self):
